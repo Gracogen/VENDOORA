@@ -41,7 +41,7 @@ function createCanvasElement(type) {
             btn.style.padding = '8px 16px';
             btn.style.border = 'none';
             btn.style.borderRadius = '4px';
-            btn.style.background = '#007bff';
+            btn.style.background = '#d32b84';
             btn.style.color = 'white';
             btn.style.cursor = 'pointer';
             el.appendChild(btn);
@@ -55,7 +55,7 @@ function createCanvasElement(type) {
             el.appendChild(img);
             break;
         case 'section':
-            el.style.border = '2px dashed #007bff';
+            el.style.border = '2px dashed #d32b84';
             el.style.minHeight = '150px';
             el.textContent = 'Section';
             break;
@@ -562,7 +562,7 @@ function makeThemeElementsEditable() {
 
         element.addEventListener('mouseenter', () => {
             if (!element.classList.contains('selected')) {
-                element.style.outline = '2px dashed #007bff';
+                element.style.outline = '2px dashed #d32b84';
             }
         });
 

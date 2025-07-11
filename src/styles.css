@@ -38,7 +38,7 @@ body {
 .logo {
     font-size: 20px;
     font-weight: bold;
-    color: #007bff;
+    color: #d32b84;
 }
 
 .toolbar-divider {
@@ -67,9 +67,9 @@ body {
 }
 
 .toolbar-btn.primary {
-    background: #007bff;
+    background: #d32b84;
     color: white;
-    border-color: #007bff;
+    border-color: #d32b84;
 }
 
 .toolbar-btn.primary:hover {
@@ -107,7 +107,7 @@ body {
 .preview-btn.active,
 .preview-btn:hover {
     background: #ffffff;
-    color: #007bff;
+    color: #d32b84;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
@@ -148,9 +148,9 @@ body {
 }
 
 .tab-btn.active {
-    color: #007bff;
+    color: #d32b84;
     background: #f8f9fa;
-    border-bottom: 2px solid #007bff;
+    border-bottom: 2px solid #d32b84;
 }
 
 .tab-content {
@@ -194,13 +194,13 @@ body {
 }
 
 .element-item:hover {
-    border-color: #007bff;
+    border-color: #d32b84;
     box-shadow: 0 2px 8px rgba(0,123,255,0.15);
 }
 
 .element-item i {
     font-size: 24px;
-    color: #007bff;
+    color: #d32b84;
     margin-bottom: 8px;
 }
 
@@ -457,7 +457,7 @@ body {
 }
 
 .theme-card:hover {
-    border-color: #007bff;
+    border-color: #d32b84;
     box-shadow: 0 4px 12px rgba(0,123,255,0.2);
     transform: translateY(-2px);
 }
@@ -637,14 +637,14 @@ body {
 }
 
 .canvas-element.selected {
-    border-color: #007bff;
+    border-color: #d32b84;
 }
 
 .canvas-element .resize-handle {
     position: absolute;
     width: 8px;
     height: 8px;
-    background: #007bff;
+    background: #d32b84;
     border: 1px solid #ffffff;
     border-radius: 2px;
 }
@@ -678,7 +678,7 @@ body {
 
 .form-control:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #d32b84;
     box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
 }
 
