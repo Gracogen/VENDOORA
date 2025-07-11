@@ -41,7 +41,7 @@ function createCanvasElement(type) {
             btn.style.padding = '8px 16px';
             btn.style.border = 'none';
             btn.style.borderRadius = '4px';
-            btn.style.background = '#d32b84';
+            btn.style.background = 'var(--primary)';
             btn.style.color = 'white';
             btn.style.cursor = 'pointer';
             el.appendChild(btn);
@@ -55,7 +55,7 @@ function createCanvasElement(type) {
             el.appendChild(img);
             break;
         case 'section':
-            el.style.border = '2px dashed #d32b84';
+            el.style.border = '2px dashed var(--primary)';
             el.style.minHeight = '150px';
             el.textContent = 'Section';
             break;
@@ -363,7 +363,7 @@ const themeTemplates = {
                     <a href="#" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
                 </div>
             </nav>
-            <section style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 100px 40px; text-align: center;">
+            <section style="background: linear-gradient(135deg,#f093fb 0%, #f5576c 100%); color: white; padding: 100px 40px; text-align: center;">
                 <h1 style="margin: 0; font-size: 3.5em; margin-bottom: 20px;">Amazing Product</h1>
                 <p style="font-size: 1.3em; margin-bottom: 40px; opacity: 0.9;">Transform your business with our innovative solution</p>
                 <button style="background: white; color: #f5576c; padding: 18px 40px; border: none; border-radius: 30px; font-size: 1.1em; cursor: pointer; margin-right: 20px;">
@@ -470,35 +470,9 @@ function initializeBuilder() {
         }
     });
 
-    // Theme loading functionality
-    const loadThemeBtn = document.getElementById('load-theme-btn');
-    const themeModal = document.getElementById('theme-modal');
-    const closeThemeModal = document.getElementById('close-theme-modal');
-    const themeCards = document.querySelectorAll('.theme-card');
-    const dropZone = document.getElementById('drop-zone');
-    const themeContainer = document.getElementById('theme-container');
+    // Theme loading functi
 
-    loadThemeBtn.addEventListener('click', () => {
-        themeModal.classList.add('active');
-    });
 
-    closeThemeModal.addEventListener('click', () => {
-        themeModal.classList.remove('active');
-    });
-
-    themeModal.addEventListener('click', (e) => {
-        if (e.target === themeModal) {
-            themeModal.classList.remove('active');
-        }
-    });
-
-    themeCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const themeName = card.dataset.theme;
-            loadTheme(themeName);
-            themeModal.classList.remove('active');
-        });
-    });
 
     // Vertical toolbar functionality
     const verticalToolItems = document.querySelectorAll('.vertical-tool-item');
@@ -518,31 +492,8 @@ function initializeBuilder() {
     addToHistory();
 }
 
-function loadTheme(themeName) {
-    const dropZone = document.getElementById('drop-zone');
-    const themeContainer = document.getElementById('theme-container');
-    
-    if (themeTemplates[themeName]) {
-        // Hide drop zone
-        dropZone.classList.add('hidden');
-        
-        // Load theme content
-        themeContainer.innerHTML = themeTemplates[themeName];
-        themeContainer.classList.add('theme-loaded');
-        
-        // Make theme elements editable
-        makeThemeElementsEditable();
-        
-        // Update builder state
-        builderState.hasTheme = true;
-        builderState.currentTheme = themeName;
-        
-        // Add to history
-        addToHistory();
-        
-        console.log(`Theme "${themeName}" loaded successfully`);
-    }
-}
+
+
 
 function makeThemeElementsEditable() {
     const themeContent = document.querySelector('.theme-content');
@@ -562,7 +513,7 @@ function makeThemeElementsEditable() {
 
         element.addEventListener('mouseenter', () => {
             if (!element.classList.contains('selected')) {
-                element.style.outline = '2px dashed #d32b84';
+                element.style.outline = '2px dashed var(--primary)';
             }
         });
 
@@ -608,3 +559,138 @@ function showAICreator() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', initializeBuilder);
+
+
+
+
+// History for Undo/Redo
+let history = [], histIndex = -1;
+const canvas = document.getElementById("canvas");
+function recordHistory() {
+  histIndex++;
+  history.splice(histIndex);
+  history.push(canvas.innerHTML);
+}
+function undo() {
+  if (histIndex > 0) { histIndex--; canvas.innerHTML = history[histIndex]; }
+}
+function redo() {
+  if (histIndex < history.length - 1) { histIndex++; canvas.innerHTML = history[histIndex]; }
+}
+document.getElementById("undo-btn").onclick = undo;
+document.getElementById("redo-btn").onclick = redo;
+
+// Zoom
+let zoom = 1;
+const zoomDisplay = document.querySelector(".zoom-level");
+const wrapper = document.querySelector(".canvas-wrapper");
+function setZoom(z) { zoom = z; wrapper.style.transform = `scale(${z})`; zoomDisplay.textContent = Math.round(z*100) + "%"; }
+document.getElementById("zoom-in").onclick = () => setZoom(Math.min(2, zoom+0.1));
+document.getElementById("zoom-out").onclick = () => setZoom(Math.max(0.2, zoom-0.1));
+
+// Fit-to-Screen
+document.getElementById("fit-to-screen").onclick = () => {
+  const cw = document.querySelector(".canvas-container").clientWidth;
+  setZoom(Math.min(1, cw/1200));
+};
+
+// Device Preview
+document.querySelectorAll(".device-preview button").forEach(btn => {
+  btn.onclick = () => {
+    document.querySelectorAll(".device-preview button").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    const w = btn.dataset.device === "desktop"? "1200px":
+              btn.dataset.device === "tablet"? "768px":"375px";
+    canvas.style.width = w;
+    setZoom(1);
+    recordHistory();
+  };
+});
+
+
+// PREVIEW MODE ENTERING
+
+document.getElementById("preview-mode-btn").onclick = () => {
+  const selectors = [".toolbar", ".sidebar", ".canvas-toolbar", ".vertical-toolbar"];
+  const isInPreview = document.body.classList.toggle("in-preview");
+
+  selectors.forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      el.style.display = isInPreview ? "none" : "";
+    });
+  });
+
+  const exitBtn = document.getElementById("exit-preview-btn");
+  if (exitBtn) exitBtn.style.display = isInPreview ? "block" : "none";
+};
+
+document.getElementById("exit-preview-btn").onclick = () => {
+  document.body.classList.remove("in-preview");
+  document.querySelectorAll(".toolbar, .sidebar, .canvas-toolbar, .vertical-toolbar").forEach(el => {
+    el.style.display = "";
+  });
+  document.getElementById("exit-preview-btn").style.display = "none";
+};
+
+
+
+// Save (localStorage)
+document.getElementById("save-btn").onclick = () => {
+  localStorage.setItem("vendoora", canvas.innerHTML);
+  alert("Your current work is saved");
+};
+
+// Load saved on page load
+window.onload = () => {
+  const saved = localStorage.getItem("vendoora");
+  if (saved) canvas.innerHTML = saved;
+  recordHistory();
+};
+
+// Export
+document.getElementById("export-btn").onclick = () => {
+  const blob = new Blob([canvas.outerHTML], {type:'text/html'});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "vendoora.html";
+  a.click();
+};
+
+// Share
+document.getElementById("share-btn").onclick = () => {
+  const link = "https://app.vendoora.com/share?" + btoa(canvas.innerHTML).slice(0,8);
+  navigator.clipboard.writeText(link);
+  alert("Copied share link:\n" + link);
+};
+
+
+// Drag and Drop Elements
+document.querySelectorAll(".vertical-tool-item").forEach(item => {
+  item.draggable = true;
+  item.ondragstart = e => { e.dataTransfer.setData("type", item.dataset.type); };
+});
+const zone = document.getElementById("canvas");
+
+
+["dragover", "drop"].forEach(ev =>
+  zone.addEventListener(ev, e => {
+    e.preventDefault();
+    if (ev === "drop") {
+      const type = e.dataTransfer.getData("type");
+      if (!type) return;
+
+      const el = createCanvasElement(type);
+      
+      const target = document.querySelector('.theme-content') || zone;
+      target.appendChild(el);
+
+      addToLayers(el);
+      addToHistory();
+      selectElement(el);
+    }
+  })
+);
+
+
+
+
