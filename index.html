@@ -40,7 +40,7 @@
       </div>
 
       <div class="toolbar-right">
-        
+        <button id="reset-project-btn" class="danger-btn">Reset Project</button>
         <button class="toolbar-btn secondary" id="preview-mode-btn">
           <i class="fas fa-eye"></i>
           Preview
@@ -234,6 +234,13 @@
         </div>
       </div>
     </main>
+    <ul id="context-menu" class="context-menu">
+  <li data-action="delete">🗑️ Delete</li>
+  <li data-action="duplicate">🔄 Duplicate</li>
+  <li data-action="bring-front">⬆️ Bring to Front</li>
+  <li data-action="send-back">⬇️ Send to Back</li>
+</ul>
+
 
     <!-- Right Properties Panel -->
     <!-- <aside class="properties-panel">

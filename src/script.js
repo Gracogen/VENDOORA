@@ -297,166 +297,6 @@ function restoreHistory() {
     updatePropertiesPanel(null);
 }
 
-// Theme Templates
-const themeTemplates = {
-    business: `
-        <div class="theme-content">
-            <header style="background: #2c3e50; color: white; padding: 20px; text-align: center;">
-                <h1 style="margin: 0; font-size: 2.5em;">Your Business Name</h1>
-                <p style="margin: 10px 0 0 0; opacity: 0.9;">Professional Services & Solutions</p>
-            </header>
-            <nav style="background: #34495e; padding: 15px; text-align: center;">
-                <a href="#" style="color: white; text-decoration: none; margin: 0 20px;">Home</a>
-                <a href="#" style="color: white; text-decoration: none; margin: 0 20px;">Services</a>
-                <a href="#" style="color: white; text-decoration: none; margin: 0 20px;">About</a>
-                <a href="#" style="color: white; text-decoration: none; margin: 0 20px;">Contact</a>
-            </nav>
-            <main style="display: flex; min-height: 500px;">
-                <section style="flex: 2; padding: 40px;">
-                    <h2 style="color: #2c3e50; margin-bottom: 20px;">Welcome to Our Company</h2>
-                    <p style="line-height: 1.6; color: #555; margin-bottom: 20px;">
-                        We provide exceptional business solutions tailored to your needs. Our team of experts 
-                        is dedicated to helping your business grow and succeed in today's competitive market.
-                    </p>
-                    <button style="background: #3498db; color: white; padding: 12px 30px; border: none; border-radius: 5px; cursor: pointer;">
-                        Get Started
-                    </button>
-                </section>
-                <aside style="flex: 1; background: #ecf0f1; padding: 40px;">
-                    <h3 style="color: #2c3e50; margin-bottom: 20px;">Our Services</h3>
-                    <ul style="list-style: none; padding: 0;">
-                        <li style="margin-bottom: 10px; padding: 10px; background: white; border-left: 4px solid #3498db;">Consulting</li>
-                        <li style="margin-bottom: 10px; padding: 10px; background: white; border-left: 4px solid #3498db;">Development</li>
-                        <li style="margin-bottom: 10px; padding: 10px; background: white; border-left: 4px solid #3498db;">Support</li>
-                    </ul>
-                </aside>
-            </main>
-        </div>
-    `,
-    portfolio: `
-        <div class="theme-content">
-            <section style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 80px 40px; text-align: center;">
-                <h1 style="margin: 0; font-size: 3em; margin-bottom: 20px;">John Doe</h1>
-                <p style="font-size: 1.2em; opacity: 0.9; margin-bottom: 30px;">Creative Designer & Developer</p>
-                <button style="background: rgba(255,255,255,0.2); color: white; padding: 15px 30px; border: 2px solid white; border-radius: 30px; cursor: pointer;">
-                    View My Work
-                </button>
-            </section>
-            <section style="padding: 60px 40px;">
-                <h2 style="text-align: center; margin-bottom: 40px; color: #333;">My Portfolio</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                        <div style="height: 200px; background: #e9ecef; border-radius: 5px; margin-bottom: 15px;"></div>
-                        <h3 style="margin-bottom: 10px;">Project One</h3>
-                        <p style="color: #666;">Web Design & Development</p>
-                    </div>
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                        <div style="height: 200px; background: #e9ecef; border-radius: 5px; margin-bottom: 15px;"></div>
-                        <h3 style="margin-bottom: 10px;">Project Two</h3>
-                        <p style="color: #666;">Mobile App Design</p>
-                    </div>
-                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                        <div style="height: 200px; background: #e9ecef; border-radius: 5px; margin-bottom: 15px;"></div>
-                        <h3 style="margin-bottom: 10px;">Project Three</h3>
-                        <p style="color: #666;">Brand Identity</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    `,
-    landing: `
-        <div class="theme-content">
-            <nav style="background: #34495e; padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;">
-                <div style="color: white; font-size: 1.5em; font-weight: bold;">Brand</div>
-                <div>
-                    <a href="#" style="color: white; text-decoration: none; margin: 0 15px;">Features</a>
-                    <a href="#" style="color: white; text-decoration: none; margin: 0 15px;">Pricing</a>
-                    <a href="#" style="color: white; text-decoration: none; margin: 0 15px;">Contact</a>
-                </div>
-            </nav>
-            <section style="background: linear-gradient(135deg,#f093fb 0%, #f5576c 100%); color: white; padding: 100px 40px; text-align: center;">
-                <h1 style="margin: 0; font-size: 3.5em; margin-bottom: 20px;">Amazing Product</h1>
-                <p style="font-size: 1.3em; margin-bottom: 40px; opacity: 0.9;">Transform your business with our innovative solution</p>
-                <button style="background: white; color: #f5576c; padding: 18px 40px; border: none; border-radius: 30px; font-size: 1.1em; cursor: pointer; margin-right: 20px;">
-                    Get Started
-                </button>
-                <button style="background: rgba(255,255,255,0.2); color: white; padding: 18px 40px; border: 2px solid white; border-radius: 30px; font-size: 1.1em; cursor: pointer;">
-                    Learn More
-                </button>
-            </section>
-            <section style="padding: 80px 40px; background: #f8f9fa;">
-                <h2 style="text-align: center; margin-bottom: 50px; color: #333;">Key Features</h2>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px;">
-                    <div style="text-align: center;">
-                        <div style="width: 80px; height: 80px; background: #3498db; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">⚡</div>
-                        <h3 style="margin-bottom: 15px;">Fast Performance</h3>
-                        <p style="color: #666;">Lightning fast load times and optimal performance</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="width: 80px; height: 80px; background: #e74c3c; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">🔒</div>
-                        <h3 style="margin-bottom: 15px;">Secure</h3>
-                        <p style="color: #666;">Enterprise-grade security for your peace of mind</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="width: 80px; height: 80px; background: #2ecc71; border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">📱</div>
-                        <h3 style="margin-bottom: 15px;">Mobile Ready</h3>
-                        <p style="color: #666;">Fully responsive and mobile optimized</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    `,
-    blog: `
-        <div class="theme-content">
-            <header style="background: #e74c3c; color: white; padding: 30px 40px; text-align: center;">
-                <h1 style="margin: 0; font-size: 2.5em;">My Blog</h1>
-                <p style="margin: 15px 0 0 0; opacity: 0.9;">Thoughts, stories and ideas</p>
-            </header>
-            <main style="max-width: 800px; margin: 0 auto; padding: 40px;">
-                <article style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #eee;">
-                    <h2 style="color: #333; margin-bottom: 10px;">
-                        <a href="#" style="text-decoration: none; color: inherit;">Getting Started with Web Development</a>
-                    </h2>
-                    <div style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
-                        March 15, 2024 • 5 min read
-                    </div>
-                    <p style="line-height: 1.6; color: #555;">
-                        Web development has evolved significantly over the years. In this post, we'll explore 
-                        the fundamentals and best practices for modern web development...
-                    </p>
-                    <a href="#" style="color: #e74c3c; text-decoration: none; font-weight: 500;">Read more →</a>
-                </article>
-                <article style="margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #eee;">
-                    <h2 style="color: #333; margin-bottom: 10px;">
-                        <a href="#" style="text-decoration: none; color: inherit;">Design Trends for 2024</a>
-                    </h2>
-                    <div style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
-                        March 12, 2024 • 3 min read
-                    </div>
-                    <p style="line-height: 1.6; color: #555;">
-                        Design trends are constantly evolving. Here are the top design trends we're seeing 
-                        in 2024 and how you can incorporate them into your projects...
-                    </p>
-                    <a href="#" style="color: #e74c3c; text-decoration: none; font-weight: 500;">Read more →</a>
-                </article>
-                <article style="margin-bottom: 40px;">
-                    <h2 style="color: #333; margin-bottom: 10px;">
-                        <a href="#" style="text-decoration: none; color: inherit;">The Future of AI in Design</a>
-                    </h2>
-                    <div style="color: #666; margin-bottom: 15px; font-size: 0.9em;">
-                        March 10, 2024 • 7 min read
-                    </div>
-                    <p style="line-height: 1.6; color: #555;">
-                        Artificial Intelligence is transforming the design industry. Let's explore how AI 
-                        tools are changing the way we approach design and creativity...
-                    </p>
-                    <a href="#" style="color: #e74c3c; text-decoration: none; font-weight: 500;">Read more →</a>
-                </article>
-            </main>
-        </div>
-    `
-};
-
 // Initialize Builder
 function initializeBuilder() {
     // Undo/Redo buttons
@@ -481,9 +321,6 @@ function initializeBuilder() {
         }
     });
 
-    // Theme loading functi
-
-
 
     // Vertical toolbar functionality
     const verticalToolItems = document.querySelectorAll('.vertical-tool-item');
@@ -501,8 +338,43 @@ function initializeBuilder() {
 
     // Initialize history with empty canvas
     addToHistory();
-}
 
+document.getElementById('reset-project-btn').addEventListener('click', () => {
+    const confirmed = confirm("Are you sure you want to reset the project? This will delete all content.");
+    if (!confirmed) return;
+
+    const canvas = document.getElementById('canvas');
+    canvas.innerHTML = `
+    
+    <div id="drop-zone" class="drop-zone">
+        <div class="drop-zone-content">
+          <i class="fas fa-plus-circle"></i>
+          <p>Drag elements here to start building</p>
+          <p class="theme-hint">Or load a theme to get started</p>
+        </div>
+      </div>
+      `;
+
+    // Reset builder state
+    builderState.elements = [];
+    builderState.selectedElement = null;
+    builderState.clipboard = null;
+    builderState.history = [];
+    builderState.historyIndex = -1;
+    builderState.hasTheme = false;
+    builderState.currentTheme = null;
+
+    updatePropertiesPanel(null);
+    updateLayersPanel();
+
+    // Clear localStorage if you want:
+    localStorage.removeItem("vendoora");
+
+    alert("Project has been reset.");
+});
+
+
+}
 
 
 
@@ -750,17 +622,53 @@ document.getElementById("exit-preview-btn").onclick = () => {
 
 
 // Save (localStorage)
+// document.getElementById("save-btn").onclick = () => {
+//   localStorage.setItem("vendoora", canvas.innerHTML);
+//   alert("Your current work is saved");
+// };
+
 document.getElementById("save-btn").onclick = () => {
-  localStorage.setItem("vendoora", canvas.innerHTML);
-  alert("Your current work is saved");
+  let currentProjectKey = localStorage.getItem("current-project-name");
+
+  // If not yet set, prompt user to enter project name
+  if (!currentProjectKey) {
+    const userInput = prompt("Enter a name for your project:");
+    if (!userInput || !userInput.trim()) {
+      alert("Project name is required to save.");
+      return;
+    }
+
+    currentProjectKey = "project-" + userInput.trim().toLowerCase().replace(/\s+/g, "-");
+    localStorage.setItem("current-project-name", currentProjectKey);
+  }
+
+  const canvas = document.getElementById("canvas");
+  localStorage.setItem(currentProjectKey, canvas.innerHTML);
+  alert("Project saved successfully as: " + currentProjectKey);
 };
 
+
+
+
 // Load saved on page load
+// window.onload = () => {
+//   const saved = localStorage.getItem("vendoora");
+//   if (saved) canvas.innerHTML = saved;
+//   recordHistory();
+// };
+
 window.onload = () => {
-  const saved = localStorage.getItem("vendoora");
-  if (saved) canvas.innerHTML = saved;
-  recordHistory();
+  const currentProjectKey = localStorage.getItem("current-project-name");
+  if (currentProjectKey) {
+    const saved = localStorage.getItem(currentProjectKey);
+    if (saved) {
+      const canvas = document.getElementById("canvas");
+      canvas.innerHTML = saved;
+      recordHistory();
+    }
+  }
 };
+
 
 // Export
 document.getElementById("export-btn").onclick = () => {
@@ -779,32 +687,86 @@ document.getElementById("share-btn").onclick = () => {
 };
 
 
-// Drag and Drop Elements
-// document.querySelectorAll(".vertical-tool-item").forEach(item => {
-//   item.draggable = true;
-//   item.ondragstart = e => { e.dataTransfer.setData("type", item.dataset.type); };
-// });
-// const zone = document.getElementById("canvas");
+
+const contextMenu = document.getElementById("context-menu");
+let contextTarget = null;
+
+// Show custom context menu on right-click
+document.getElementById("canvas").addEventListener("contextmenu", function (e) {
+  const el = e.target.closest(".canvas-element");
+  if (el) {
+    e.preventDefault();
+    contextTarget = el;
+
+    contextMenu.style.top = `${e.pageY}px`;
+    contextMenu.style.left = `${e.pageX}px`;
+    contextMenu.style.display = "block";
+  } else {
+    contextMenu.style.display = "none";
+  }
+});
+
+// Hide menu on click elsewhere
+document.addEventListener("click", () => {
+  contextMenu.style.display = "none";
+});
+
+// Handle context menu actions
+contextMenu.addEventListener("click", (e) => {
+  const action = e.target.dataset.action;
+  if (!action || !contextTarget) return;
+
+  switch (action) {
+    case "delete":
+      contextTarget.remove();
+      addToHistory();
+      break;
+
+    case "duplicate":
+      const clone = contextTarget.cloneNode(true);
+      contextTarget.parentElement.appendChild(clone);
+      attachCanvasEvents(clone);
+      addToHistory();
+      break;
+
+    case "bring-front":
+      contextTarget.style.zIndex = parseInt(getMaxZIndex()) + 1;
+      break;
+
+    case "send-back":
+      contextTarget.style.zIndex = 1;
+      break;
+  }
+
+  contextTarget = null;
+  contextMenu.style.display = "none";
+});
+
+// Helper: attach click listener for new clones
+function attachCanvasEvents(el) {
+  el.addEventListener("click", (e) => {
+    e.stopPropagation();
+    selectElement(el);
+  });
+  el.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+    contextTarget = el;
+    contextMenu.style.top = `${e.pageY}px`;
+    contextMenu.style.left = `${e.pageX}px`;
+    contextMenu.style.display = "block";
+  });
+}
+
+// Helper: find current max z-index
+function getMaxZIndex() {
+  const elements = document.querySelectorAll(".canvas-element");
+  return Math.max(
+    0,
+    ...Array.from(elements).map(el => parseInt(getComputedStyle(el).zIndex) || 0)
+  );
+}
 
 
-// ["dragover", "drop"].forEach(ev =>
-//   zone.addEventListener(ev, e => {
-//     e.preventDefault();
-//     if (ev === "drop") {
-//       const type = e.dataTransfer.getData("type");
-//       if (!type) return;
-
-//       const el = createCanvasElement(type);
-      
-//       const target = document.querySelector('.theme-content') || zone;
-//       target.appendChild(el);
-
-//       addToLayers(el);
-//       addToHistory();
-//       selectElement(el);
-//     }
-//   })
-// );
 
 
 
