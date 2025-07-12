@@ -12,6 +12,17 @@ const builderState = {
 // Utility Functions
 function createCanvasElement(type) {
     const el = document.createElement('div');
+
+
+    el.dataset.elementId = 'element-' + Date.now();
+el.setAttribute('draggable', 'true');
+el.addEventListener('dragstart', (e) => {
+  e.dataTransfer.setData('dragged-id', el.dataset.elementId);
+});
+
+
+
+
     el.classList.add('canvas-element');
     el.dataset.type = type;
     el.style.position = 'relative';
@@ -525,6 +536,8 @@ function makeThemeElementsEditable() {
     });
 }
 
+// ADDING ELEMENTS TO CANVAS, DROP AND DRAP ZONE
+
 function addElementToCanvas(elementType) {
     const canvas = document.getElementById('canvas');
     const element = createCanvasElement(elementType);
@@ -552,6 +565,108 @@ function addElementToCanvas(elementType) {
     selectElement(element);
 }
 
+document.querySelectorAll(".vertical-tool-item").forEach(item => {
+  item.draggable = true;
+  item.ondragstart = e => { e.dataTransfer.setData("type", item.dataset.type); };
+});
+const zone = document.getElementById("canvas");
+
+
+function isDropTarget(type) {
+  return ['section', 'container', 'grid', 'gallery'].includes(type);
+}
+
+
+
+["dragover", "drop"].forEach(ev =>
+  document.addEventListener(ev, e => {
+    e.preventDefault();
+
+    const type = e.dataTransfer.getData("type");
+    const draggedId = e.dataTransfer.getData("dragged-id");
+
+    let target = e.target.closest('.canvas-element');
+    if (!target || !isDropTarget(target.dataset.type)) {
+      target = document.getElementById('canvas');
+    }
+
+    // Highlight on dragover
+    document.querySelectorAll('.canvas-element').forEach(el => el.classList.remove('drop-target-hover'));
+    if (ev === "dragover" && target && isDropTarget(target.dataset.type)) {
+      target.classList.add('drop-target-hover');
+    }
+
+    if (ev === "drop") {
+      document.querySelectorAll('.canvas-element').forEach(el => el.classList.remove('drop-target-hover'));
+
+      // ✅ Handle internal move (reparenting existing element)
+      if (draggedId) {
+        const draggedEl = document.querySelector(`[data-element-id="${draggedId}"]`);
+        if (draggedEl && draggedEl !== target && !draggedEl.contains(target)) {
+          target.appendChild(draggedEl);
+          addToHistory();
+          updateLayersPanel();
+          selectElement(draggedEl);
+        }
+        return;
+      }
+
+      //Handle new element from toolbar
+      if (type) {
+        const newEl = createCanvasElement(type);
+        target.appendChild(newEl);
+        addToLayers(newEl);
+        addToHistory();
+        selectElement(newEl);
+      }
+    }
+  })
+);
+
+
+
+
+
+// ["dragover", "drop"].forEach(ev =>
+//   document.addEventListener(ev, e => {
+//     e.preventDefault();
+
+//     const type = e.dataTransfer.getData("type");
+//     if (!type) return;
+
+//     // Find the closest drop target
+//     let target = e.target.closest('.canvas-element');
+
+//     document.addEventListener("dragover", e => {
+//   const el = e.target.closest('.canvas-element');
+//   document.querySelectorAll('.canvas-element').forEach(el => el.classList.remove('drop-target-hover'));
+//   if (el && isDropTarget(el.dataset.type)) {
+//     el.classList.add('drop-target-hover');
+//   }
+// });
+// document.addEventListener("dragleave", () => {
+//   document.querySelectorAll('.canvas-element').forEach(el => el.classList.remove('drop-target-hover'));
+// });
+
+
+
+//     if (!target || !isDropTarget(target.dataset.type)) {
+//       target = document.getElementById('canvas');
+//     }
+
+//     if (ev === "drop") {
+//       const newEl = createCanvasElement(type);
+//       target.appendChild(newEl);
+
+//       addToLayers(newEl);
+//       addToHistory();
+//       selectElement(newEl);
+//     }
+//   })
+// );
+
+
+
 function showAICreator() {
     // Placeholder for AI Creator functionality
     alert('AI Creator feature coming soon! This will help you generate content and layouts using AI.');
@@ -564,21 +679,21 @@ document.addEventListener('DOMContentLoaded', initializeBuilder);
 
 
 // History for Undo/Redo
-let history = [], histIndex = -1;
-const canvas = document.getElementById("canvas");
-function recordHistory() {
-  histIndex++;
-  history.splice(histIndex);
-  history.push(canvas.innerHTML);
-}
-function undo() {
-  if (histIndex > 0) { histIndex--; canvas.innerHTML = history[histIndex]; }
-}
-function redo() {
-  if (histIndex < history.length - 1) { histIndex++; canvas.innerHTML = history[histIndex]; }
-}
-document.getElementById("undo-btn").onclick = undo;
-document.getElementById("redo-btn").onclick = redo;
+// let history = [], histIndex = -1;
+// const canvas = document.getElementById("canvas");
+// function recordHistory() {
+//   histIndex++;
+//   history.splice(histIndex);
+//   history.push(canvas.innerHTML);
+// }
+// function undo() {
+//   if (histIndex > 0) { histIndex--; canvas.innerHTML = history[histIndex]; }
+// }
+// function redo() {
+//   if (histIndex < history.length - 1) { histIndex++; canvas.innerHTML = history[histIndex]; }
+// }
+// document.getElementById("undo-btn").onclick = undo;
+// document.getElementById("redo-btn").onclick = redo;
 
 // Zoom
 let zoom = 1;
@@ -665,31 +780,31 @@ document.getElementById("share-btn").onclick = () => {
 
 
 // Drag and Drop Elements
-document.querySelectorAll(".vertical-tool-item").forEach(item => {
-  item.draggable = true;
-  item.ondragstart = e => { e.dataTransfer.setData("type", item.dataset.type); };
-});
-const zone = document.getElementById("canvas");
+// document.querySelectorAll(".vertical-tool-item").forEach(item => {
+//   item.draggable = true;
+//   item.ondragstart = e => { e.dataTransfer.setData("type", item.dataset.type); };
+// });
+// const zone = document.getElementById("canvas");
 
 
-["dragover", "drop"].forEach(ev =>
-  zone.addEventListener(ev, e => {
-    e.preventDefault();
-    if (ev === "drop") {
-      const type = e.dataTransfer.getData("type");
-      if (!type) return;
+// ["dragover", "drop"].forEach(ev =>
+//   zone.addEventListener(ev, e => {
+//     e.preventDefault();
+//     if (ev === "drop") {
+//       const type = e.dataTransfer.getData("type");
+//       if (!type) return;
 
-      const el = createCanvasElement(type);
+//       const el = createCanvasElement(type);
       
-      const target = document.querySelector('.theme-content') || zone;
-      target.appendChild(el);
+//       const target = document.querySelector('.theme-content') || zone;
+//       target.appendChild(el);
 
-      addToLayers(el);
-      addToHistory();
-      selectElement(el);
-    }
-  })
-);
+//       addToLayers(el);
+//       addToHistory();
+//       selectElement(el);
+//     }
+//   })
+// );
 
 
 

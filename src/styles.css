@@ -637,10 +637,17 @@ body.dark-mode {
     border: 2px solid transparent;
     min-width: 20px;
     min-height: 20px;
+    
 }
+
+.canvas-element.drop-target-hover {
+  outline: 2px dashed #00aaff;
+}
+
 
 .canvas-element.selected {
     border-color: var(--primary);
+    cursor: grabbing;
 }
 
 .canvas-element .resize-handle {
