@@ -41,12 +41,14 @@ function createCanvasElement(type) {
     case 'text':
       el.textContent = 'Sample text';
       el.contentEditable = 'true';
+      makeElementResizable(el);
       break;
     case 'heading':
       el.textContent = 'Sample Heading';
       el.style.fontWeight = 'bold';
       el.style.fontSize = '1.5em';
       el.contentEditable = 'true';
+      makeElementResizable(el);
       break;
     case 'button':
       const btn = document.createElement('button');
@@ -58,6 +60,7 @@ function createCanvasElement(type) {
       btn.style.color = 'white';
       btn.style.cursor = 'pointer';
       el.appendChild(btn);
+      makeElementResizable(el);
       break;
     case 'image':
       const img = document.createElement('img');
@@ -92,17 +95,20 @@ function createCanvasElement(type) {
       });
 
       el.appendChild(fileInput);
+      makeElementResizable(el);
       break;
 
     case 'section':
       el.style.border = '2px dashed var(--primary)';
       el.style.minHeight = '150px';
       el.textContent = 'Section';
+      makeElementResizable(el);
       break;
     case 'container':
       el.style.border = '2px solid #28a745';
       el.style.minHeight = '100px';
       el.textContent = 'Container';
+      makeElementResizable(el);
       break;
     case 'grid':
       el.style.display = 'grid';
@@ -116,6 +122,7 @@ function createCanvasElement(type) {
         gridItem.style.height = '80px';
         el.appendChild(gridItem);
       }
+      makeElementResizable(el);
       break;
     case 'gallery':
       el.style.display = 'flex';
@@ -128,6 +135,7 @@ function createCanvasElement(type) {
         galleryImg.style.borderRadius = '4px';
         el.appendChild(galleryImg);
       }
+      makeElementResizable(el);
       break;
     default:
       el.textContent = 'Unknown Element';
@@ -422,6 +430,8 @@ function makeThemeElementsEditable() {
         element.style.outline = 'none';
       }
     });
+
+    makeElementResizable(el)
   });
 }
 
@@ -646,6 +656,8 @@ window.onload = () => {
         el.addEventListener('dragstart', (e) => {
           e.dataTransfer.setData('dragged-id', el.dataset.elementId);
         });
+        makeElementResizable(el);
+
       });
 
 
@@ -956,5 +968,49 @@ function reattachImageClickListeners() {
         }
       };
     }
+  });
+}
+
+
+function makeElementResizable(el) {
+  const resizer = document.createElement('div');
+  resizer.className = 'resizer-handle';
+  resizer.style.width = '5px';
+  resizer.style.height = '5px';
+  resizer.style.background = 'var(--primary)';
+  resizer.style.position = 'absolute';
+  resizer.style.right = '0';
+  resizer.style.bottom = '0';
+  resizer.style.cursor = 'se-resize';
+  resizer.style.zIndex = '1000';
+
+  el.style.position = 'relative'; // Ensure element is positionable
+  el.appendChild(resizer);
+
+  let startX, startY, startWidth, startHeight;
+
+  resizer.addEventListener('mousedown', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    startX = e.clientX;
+    startY = e.clientY;
+    startWidth = parseInt(getComputedStyle(el).width, 10);
+    startHeight = parseInt(getComputedStyle(el).height, 10);
+
+    function onMouseMove(e) {
+      const newWidth = startWidth + (e.clientX - startX);
+      const newHeight = startHeight + (e.clientY - startY);
+      el.style.width = newWidth + 'px';
+      el.style.height = newHeight + 'px';
+    }
+
+    function onMouseUp() {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      addToHistory(); // Save the resize action
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
 }

@@ -899,6 +899,32 @@ body.dark-mode {
     font-size: 12px;
 }
 
+/* .resizer-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #007bff;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 1000;
+} */
+
+
+
+.canvas-element .resizer-handle {
+  width: 10px;
+  height: 10px;
+  background: #007bff;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  cursor: se-resize;
+  z-index: 1000;
+  border-radius: 2px;
+}
+
+
 /* Responsive */
 @media (max-width: 1200px) {
     .sidebar {
