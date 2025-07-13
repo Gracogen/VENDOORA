@@ -780,10 +780,10 @@ function addFloatingMenu(targetEl) {
   <button title="Edit Text"><i class="fas fa-edit"></i></button>
   <button title="Text Colour"><i class="fas fa-paint-brush"></i></button>
   <button title="Background Colour"><i class="fas fa-fill-drip"></i></button>
-  <button title="Border Colour"><i class="fas fa-border-style"></i></button>
   <button title="Font Size"><i class="fas fa-text-height"></i></button>
   <button title="Font Family"><i class="fas fa-font"></i></button>
-  <button title="Border Radius">     <i class="fas fa-square"></i></button>
+  <button title="Border Colour"><i class="fas fa-border-style"></i></button>
+  <button title="Border Radius"><i class="fas fa-square"></i></button>
   <button title="Delete"><i class="fas fa-trash-alt"></i></button>
 `;
 
