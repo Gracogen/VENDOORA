@@ -62,7 +62,7 @@ function createCanvasElement(type) {
     case 'image':
       const img = document.createElement('img');
       img.src = 'https://via.placeholder.com/150';
-      img.alt = 'Uploaded Image';
+      img.alt = 'Upload Image';
       img.style.maxWidth = '100%';
       img.style.borderRadius = '4px';
       img.style.cursor = 'pointer';
