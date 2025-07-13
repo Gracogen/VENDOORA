@@ -234,12 +234,12 @@
         </div>
       </div>
     </main>
-    <ul id="context-menu" class="context-menu">
-  <li data-action="delete">🗑️ Delete</li>
-  <li data-action="duplicate">🔄 Duplicate</li>
-  <li data-action="bring-front">⬆️ Bring to Front</li>
-  <li data-action="send-back">⬇️ Send to Back</li>
+  <ul id="contextMenu" class="custom-context-menu hidden">
+  <li data-action="edit">Edit</li>
+  <li data-action="duplicate">Duplicate</li>
+  <li data-action="delete">Delete</li>
 </ul>
+
 
 
     <!-- Right Properties Panel -->
@@ -259,6 +259,37 @@
         </div>
       </aside>
     </div> -->
+
+    <!-- <div class="properties-panel">
+  <div class="properties-header">
+    <h3>Properties</h3>
+    <button class="close-btn" onclick="updatePropertiesPanel(null)">×</button>
+  </div>
+  <div class="properties-content"></div>
+</div> -->
+
+
+
+<!-- Custom Alert -->
+<div id="custom-alert-overlay" class="custom-modal-overlay hidden">
+  <div class="custom-modal-box">
+    <p id="custom-alert-message">This is an alert message.</p>
+    <button id="custom-alert-ok" class="custom-btn">OK</button>
+  </div>
+</div>
+
+
+<div id="custom-modal" class="custom-modal hidden">
+  <div class="custom-modal-content">
+    <p id="custom-modal-message"></p>
+    <div class="custom-modal-buttons">
+      <button id="custom-modal-confirm">OK</button>
+      <button id="custom-modal-cancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
 
 
   
