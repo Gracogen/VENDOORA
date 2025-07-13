@@ -303,9 +303,13 @@ function restoreHistory() {
     });
   });
 
+
+
   updateLayersPanel();
   builderState.selectedElement = null;
   // updatePropertiesPanel(null);
+  reattachImageClickListeners();
+
 }
 
 // Initialize Builder
@@ -385,6 +389,7 @@ function initializeBuilder() {
     showCustomAlert("Project has been reset!");
   });
 
+reattachImageClickListeners();
 
 }
 
@@ -520,25 +525,6 @@ function showAICreator() {
 document.addEventListener('DOMContentLoaded', initializeBuilder);
 
 
-
-
-// History for Undo/Redo
-// let history = [], histIndex = -1;
-// const canvas = document.getElementById("canvas");
-// function recordHistory() {
-//   histIndex++;
-//   history.splice(histIndex);
-//   history.push(canvas.innerHTML);
-// }
-// function undo() {
-//   if (histIndex > 0) { histIndex--; canvas.innerHTML = history[histIndex]; }
-// }
-// function redo() {
-//   if (histIndex < history.length - 1) { histIndex++; canvas.innerHTML = history[histIndex]; }
-// }
-// document.getElementById("undo-btn").onclick = undo;
-// document.getElementById("redo-btn").onclick = redo;
-
 // Zoom
 let zoom = 1;
 const zoomDisplay = document.querySelector(".zoom-level");
@@ -562,7 +548,7 @@ document.querySelectorAll(".device-preview button").forEach(btn => {
       btn.dataset.device === "tablet" ? "768px" : "375px";
     canvas.style.width = w;
     setZoom(1);
-    recordHistory();
+    // recordHistory();
   };
 });
 
@@ -662,31 +648,14 @@ window.onload = () => {
         });
       });
 
+
       updateLayersPanel();
 
-      recordHistory();
+      // recordHistory();
+      reattachImageClickListeners();
+
     }
   }
-
-
-
-
-  // // Re-initialize canvas elements after loading from storage
-  // const savedElements = canvas.querySelectorAll('.canvas-element');
-  // builderState.elements = Array.from(savedElements);
-
-  // savedElements.forEach(el => {
-  //   el.addEventListener('click', (e) => {
-  //     e.stopPropagation();
-  //     selectElement(el);
-  //   });
-  //   el.setAttribute('draggable', 'true');
-  //   el.addEventListener('dragstart', (e) => {
-  //     e.dataTransfer.setData('dragged-id', el.dataset.elementId);
-  //   });
-  // });
-
-  // updateLayersPanel();
 
 };
 
@@ -960,3 +929,32 @@ function changeFont(id) {
   if (font) el.style.fontFamily = font;
 }
 
+
+
+function reattachImageClickListeners() {
+  const canvas = document.getElementById("canvas");
+  const imageWrappers = canvas.querySelectorAll(".canvas-element");
+
+  imageWrappers.forEach(wrapper => {
+    const img = wrapper.querySelector("img");
+    const fileInput = wrapper.querySelector('input[type="file"]');
+
+    if (img && fileInput) {
+      img.onclick = (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      };
+
+      fileInput.onchange = () => {
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            img.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+    }
+  });
+}
