@@ -56,9 +56,10 @@ body.dark-mode {
 } */
 
 #builder-container {
-    height: 100vh;
+    /* min-height: 70vh; */
     display: flex;
     flex-direction: column;
+    /* padding-bottom: 30vh; */
 }
 
 /* Toolbar Styles */
@@ -514,6 +515,7 @@ body.dark-mode {
     display: flex;
     flex-direction: column;
     background: #f5f5f5;
+    /* min-height: 3000px; */
 }
 
 .canvas-toolbar {
@@ -630,6 +632,7 @@ body.dark-mode {
     display: flex;
     justify-content: center;
     align-items: flex-start;
+    /* min-height: 2000px; */
 }
 
 .canvas {
@@ -719,6 +722,7 @@ body.dark-mode {
     max-height: 80vh;
     overflow: hidden;
 }
+
 
 .modal-header {
     padding: 20px;
@@ -831,12 +835,68 @@ body.dark-mode {
 /* Element Styles */
 .canvas-element {
     position: relative;
+    box-sizing: border-box;
     cursor: auto;
     border: 2px solid transparent;
-    min-width: 20px;
-    min-height: 20px;
+    min-width: 30px;
+    min-height: 30px;
     overflow: visible;
+    margin: 6px 0;
+  padding: 10px;
 }
+
+/* .placeholder-container:empty::before {
+  content: attr(data-placeholder);
+  color: #aaa;
+  font-style: italic;
+  display: block;
+  text-align: center;
+  padding: 20px;
+  pointer-events: none;
+} */
+
+.vertical-tool-item:empty::before {
+  content: attr(data-placeholder);
+  color: gray;
+  font-style: italic;
+}
+
+
+
+/* .canvas-element:empty::before {
+  content: attr(data-placeholder);
+  color: #bbb;
+  font-style: italic;
+  display: block;
+  padding: 10px;
+  pointer-events: none;
+} */
+
+/* /* .canvas-element[data-type="container"]:empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+  font-style: italic;
+  display: block;
+  /* padding: 10px; 
+  text-align: center;
+}  */
+
+/* 
+.canvas-element:empty::before {
+  content: attr(data-placeholder);
+  color: #999;
+  font-style: italic;
+  display: block;
+  text-align: center;
+  padding: 20px 0;
+} */
+
+
+
+.canvas-element:empty {
+  display: none;
+}
+
 
 .canvas-element.drop-target-hover {
   outline: 2px dashed #00aaff;

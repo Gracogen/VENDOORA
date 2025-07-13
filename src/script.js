@@ -107,7 +107,12 @@ function createCanvasElement(type) {
     case 'container':
       el.style.border = '2px solid #28a745';
       el.style.minHeight = '100px';
-      el.textContent = 'Container';
+      // el.innerHTML = '.';
+      el.innerHTML = '<div></div>';
+//       el.classList.add('placeholder-container');
+// el.dataset.placeholder = 'Container';
+
+
       makeElementResizable(el);
       break;
     case 'grid':
@@ -397,7 +402,7 @@ function initializeBuilder() {
     showCustomAlert("Project has been reset!");
   });
 
-reattachImageClickListeners();
+  reattachImageClickListeners();
 
 }
 
@@ -452,7 +457,9 @@ function addElementToCanvas(elementType) {
   } else {
     // Hide drop zone and add element
     const dropZone = document.getElementById('drop-zone');
-    dropZone.classList.add('hidden');
+    // dropZone.classList.add('hidden');
+    if (dropZone) dropZone.remove();
+
     canvas.appendChild(element);
   }
 
@@ -792,17 +799,19 @@ function addFloatingMenu(targetEl) {
   <button title="Font Family"><i class="fas fa-font"></i></button>
   <button title="Border Colour"><i class="fas fa-border-style"></i></button>
   <button title="Border Radius"><i class="fas fa-square"></i></button>
+    <button title="Border Style"><i class="fas fa-grip-lines"></i></button>
   <button title="Delete"><i class="fas fa-trash-alt"></i></button>
 `;
 
   menu.children[0].onclick = () => editText();
   menu.children[1].onclick = () => changeTextColor();
   menu.children[2].onclick = () => changeBgColor();
-  menu.children[3].onclick = () => changeBorderColor();
-  menu.children[4].onclick = () => changeFontSize();
-  menu.children[5].onclick = () => changeFontFamily();
+  menu.children[3].onclick = () => changeFontSize();
+  menu.children[4].onclick = () => changeFontFamily();
+  menu.children[5].onclick = () => changeBorderColor();
   menu.children[6].onclick = () => changeBorderRadius();
-  menu.children[7].onclick = () => deleteElement();
+  menu.children[7].onclick = () => changeBorderStyle(); 
+  menu.children[8].onclick = () => deleteElement();
 
 
   // Save the current element globally so buttons know what they're editing
@@ -852,6 +861,13 @@ function changeBgColor() {
   const color = prompt("Enter background color:");
   if (color) el.style.backgroundColor = color;
 }
+
+function changeBorderStyle() {
+  const el = getTarget();
+  const style = prompt("Enter border style: solid, dashed, dotted, double, groove, ridge, inset, outset", "solid");
+  if (style) el.style.borderStyle = style;
+}
+
 
 function changeBorderColor() {
   const el = getTarget();
@@ -971,46 +987,75 @@ function reattachImageClickListeners() {
   });
 }
 
+// MAKE ELEMENTS RESIZEABLE
+
 
 function makeElementResizable(el) {
-  const resizer = document.createElement('div');
-  resizer.className = 'resizer-handle';
-  resizer.style.width = '5px';
-  resizer.style.height = '5px';
-  resizer.style.background = 'var(--primary)';
-  resizer.style.position = 'absolute';
-  resizer.style.right = '0';
-  resizer.style.bottom = '0';
-  resizer.style.cursor = 'se-resize';
-  resizer.style.zIndex = '1000';
+  let isResizing = false;
+  let activeEdge = null;
 
-  el.style.position = 'relative'; // Ensure element is positionable
-  el.appendChild(resizer);
+  el.addEventListener('mousemove', (e) => {
+    if (isResizing) return;
 
-  let startX, startY, startWidth, startHeight;
+    const rect = el.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left;
+    const offsetY = e.clientY - rect.top;
 
-  resizer.addEventListener('mousedown', (e) => {
-    e.preventDefault();
+    const nearRight = offsetX >= rect.width - 8;
+    const nearBottom = offsetY >= rect.height - 8;
+
+    if (nearRight) {
+      el.style.cursor = 'ew-resize';
+      activeEdge = 'right';
+    } else if (nearBottom) {
+      el.style.cursor = 'ns-resize';
+      activeEdge = 'bottom';
+    } else {
+      el.style.cursor = 'default';
+      activeEdge = null;
+    }
+  });
+
+  el.addEventListener('mousedown', (e) => {
+    if (!activeEdge) return;
+
     e.stopPropagation();
-    startX = e.clientX;
-    startY = e.clientY;
-    startWidth = parseInt(getComputedStyle(el).width, 10);
-    startHeight = parseInt(getComputedStyle(el).height, 10);
+    e.preventDefault();
+    isResizing = true;
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = el.offsetWidth;
+    const startHeight = el.offsetHeight;
 
     function onMouseMove(e) {
-      const newWidth = startWidth + (e.clientX - startX);
-      const newHeight = startHeight + (e.clientY - startY);
-      el.style.width = newWidth + 'px';
-      el.style.height = newHeight + 'px';
+      if (!isResizing) return;
+
+      if (activeEdge === 'right') {
+        const newWidth = startWidth + (e.clientX - startX);
+        if (newWidth >= 50) el.style.width = newWidth + 'px';
+      } else if (activeEdge === 'bottom') {
+        const newHeight = startHeight + (e.clientY - startY);
+        if (newHeight >= 30) el.style.height = newHeight + 'px';
+      }
     }
 
     function onMouseUp() {
+      isResizing = false;
+      activeEdge = null;
+      el.style.cursor = 'default';
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      addToHistory(); // Save the resize action
+      addToHistory(); // Save after resize
     }
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+  });
+
+  // Prevent drag during resize
+  el.addEventListener('dragstart', (e) => {
+    if (isResizing) {
+      e.preventDefault();
+    }
   });
 }
