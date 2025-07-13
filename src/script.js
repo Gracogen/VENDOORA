@@ -62,11 +62,38 @@ function createCanvasElement(type) {
     case 'image':
       const img = document.createElement('img');
       img.src = 'https://via.placeholder.com/150';
-      img.alt = 'Placeholder Image';
+      img.alt = 'Uploaded Image';
       img.style.maxWidth = '100%';
       img.style.borderRadius = '4px';
+      img.style.cursor = 'pointer';
       el.appendChild(img);
+
+      // Create a hidden file input element
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+      fileInput.style.display = 'none';
+
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            img.src = reader.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // When image is clicked, trigger the file picker
+      img.addEventListener('click', (e) => {
+        e.stopPropagation();
+        fileInput.click();
+      });
+
+      el.appendChild(fileInput);
       break;
+
     case 'section':
       el.style.border = '2px dashed var(--primary)';
       el.style.minHeight = '150px';
@@ -621,21 +648,21 @@ window.onload = () => {
       const canvas = document.getElementById("canvas");
       canvas.innerHTML = saved;
       // Re-initialize canvas elements after loading from storage
-  const savedElements = canvas.querySelectorAll('.canvas-element');
-  builderState.elements = Array.from(savedElements);
+      const savedElements = canvas.querySelectorAll('.canvas-element');
+      builderState.elements = Array.from(savedElements);
 
-  savedElements.forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      selectElement(el);
-    });
-    el.setAttribute('draggable', 'true');
-    el.addEventListener('dragstart', (e) => {
-      e.dataTransfer.setData('dragged-id', el.dataset.elementId);
-    });
-  });
+      savedElements.forEach(el => {
+        el.addEventListener('click', (e) => {
+          e.stopPropagation();
+          selectElement(el);
+        });
+        el.setAttribute('draggable', 'true');
+        el.addEventListener('dragstart', (e) => {
+          e.dataTransfer.setData('dragged-id', el.dataset.elementId);
+        });
+      });
 
-  updateLayersPanel();
+      updateLayersPanel();
 
       recordHistory();
     }
@@ -787,14 +814,14 @@ function addFloatingMenu(targetEl) {
   <button title="Delete"><i class="fas fa-trash-alt"></i></button>
 `;
 
-menu.children[0].onclick = () => editText();
-menu.children[1].onclick = () => changeTextColor();
-menu.children[2].onclick = () => changeBgColor();
-menu.children[3].onclick = () => changeBorderColor();
-menu.children[4].onclick = () => changeFontSize();
-menu.children[5].onclick = () => changeFontFamily();
-menu.children[6].onclick = () => changeBorderRadius();
-menu.children[7].onclick = () => deleteElement();
+  menu.children[0].onclick = () => editText();
+  menu.children[1].onclick = () => changeTextColor();
+  menu.children[2].onclick = () => changeBgColor();
+  menu.children[3].onclick = () => changeBorderColor();
+  menu.children[4].onclick = () => changeFontSize();
+  menu.children[5].onclick = () => changeFontFamily();
+  menu.children[6].onclick = () => changeBorderRadius();
+  menu.children[7].onclick = () => deleteElement();
 
 
   // Save the current element globally so buttons know what they're editing
