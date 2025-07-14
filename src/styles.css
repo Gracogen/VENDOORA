@@ -1,3 +1,4 @@
+
 :root {
   --primary: #d32b84;
   --primary-dark: #b0216f;
@@ -15,6 +16,13 @@
   --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
 }
+
+
+header {
+  position: sticky;
+  top: 0;
+}
+
 
 * {
   margin: 0;
@@ -267,6 +275,7 @@ body.dark-mode {
   position: absolute;
   z-index: 9999;
   max-width: 90vw;
+  width: 90%;
   flex-wrap: wrap;
 }
 

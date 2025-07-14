@@ -885,7 +885,8 @@ function addFloatingMenu(targetEl) {
   <button title="Font Family"><i class="fas fa-font"></i></button>
   <button title="Border Colour"><i class="fas fa-border-style"></i></button>
   <button title="Border Radius"><i class="fas fa-square"></i></button>
-    <button title="Border Style"><i class="fas fa-grip-lines"></i></button>
+  <button title="Border Style"><i class="fas fa-grip-lines"></i></button>
+  <button title="Box Shadow"><i class="fas fa-cloud"></i></button>
   <button title="Delete"><i class="fas fa-trash-alt"></i></button>
 `;
 
@@ -897,7 +898,8 @@ function addFloatingMenu(targetEl) {
   menu.children[5].onclick = () => changeBorderColor();
   menu.children[6].onclick = () => changeBorderRadius();
   menu.children[7].onclick = () => changeBorderStyle(); 
-  menu.children[8].onclick = () => deleteElement();
+  menu.children[8].onclick = () => changeBoxShadow();
+  menu.children[9].onclick = () => deleteElement();
 
 
   // Save the current element globally so buttons know what they're editing
@@ -1055,6 +1057,19 @@ function changeBorderRadius() {
     }
   );
 }
+
+function changeBoxShadow() {
+  const el = getTarget();
+
+  showCustomInput(
+    "Enter box shadow (e.g., 2px 2px 5px rgba(0,0,0,0.3)):",
+    el.style.boxShadow || "2px 2px 5px rgba(0,0,0,0.3)",
+    (value) => {
+      if (value) el.style.boxShadow = value;
+    }
+  );
+}
+
 
 
 // showCustomConfirm("Are you sure you want to delete this element?", (confirmed) => {
