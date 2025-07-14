@@ -602,27 +602,65 @@ document.getElementById("exit-preview-btn").onclick = () => {
 //   alert("Your current work is saved");
 // };
 
+// document.getElementById("save-btn").onclick = () => {
+//   let currentProjectKey = localStorage.getItem("current-project-name");
+
+//   // If not yet set, prompt user to enter project name
+//   if (!currentProjectKey) {
+//     // const userInput = prompt("Enter a name for your project:");
+
+//      const userInput = showCustomInput("Enter a name for your product font size (e.g., vendoora):", "Bill Nelson", (userInput) => {
+
+//        if (!userInput || !userInput.trim()) {
+//       // alert("Project name is required to save.");
+//       showCustomAlert("Project name is required to save.");
+//       return;
+//     }
+ 
+// });
+    // if (!userInput || !userInput.trim()) {
+    //   // alert("Project name is required to save.");
+    //   showCustomAlert("Project name is required to save.");
+    //   return;
+    // }
+
+//     currentProjectKey = "project-" + userInput.trim().toLowerCase().replace(/\s+/g, "-");
+//     localStorage.setItem("current-project-name", currentProjectKey);
+//   }
+
+//   const canvas = document.getElementById("canvas");
+//   localStorage.setItem(currentProjectKey, canvas.innerHTML);
+//   // alert("Project saved successfully as: " + currentProjectKey);
+//   showCustomAlert("Project saved successfully as: " + currentProjectKey);
+// };
+
+
 document.getElementById("save-btn").onclick = () => {
   let currentProjectKey = localStorage.getItem("current-project-name");
 
-  // If not yet set, prompt user to enter project name
   if (!currentProjectKey) {
-    const userInput = prompt("Enter a name for your project:");
-    if (!userInput || !userInput.trim()) {
-      // alert("Project name is required to save.");
-      showCustomAlert("Project name is required to save.");
-      return;
-    }
+    showCustomInput("Enter a name for your project:", "vendoora", (userInput) => {
+      if (!userInput || !userInput.trim()) {
+        showCustomAlert("Project name is required to save.");
+        return;
+      }
 
-    currentProjectKey = "project-" + userInput.trim().toLowerCase().replace(/\s+/g, "-");
-    localStorage.setItem("current-project-name", currentProjectKey);
+      currentProjectKey = "project-" + userInput.trim().toLowerCase().replace(/\s+/g, "-");
+      localStorage.setItem("current-project-name", currentProjectKey);
+
+      const canvas = document.getElementById("canvas");
+      localStorage.setItem(currentProjectKey, canvas.innerHTML);
+      showCustomAlert("Project saved successfully as: " + currentProjectKey);
+    });
+
+    return;
   }
 
   const canvas = document.getElementById("canvas");
   localStorage.setItem(currentProjectKey, canvas.innerHTML);
-  // alert("Project saved successfully as: " + currentProjectKey);
   showCustomAlert("Project saved successfully as: " + currentProjectKey);
 };
+
 
 
 
@@ -711,6 +749,54 @@ function showCustomAlert(message, callback = null) {
     if (callback) callback();
   };
 }
+
+
+function showCustomInput(message, placeholder, callback) {
+  const inputOverlay = document.createElement("div");
+  inputOverlay.style.position = "fixed";
+  inputOverlay.style.top = 0;
+  inputOverlay.style.left = 0;
+  inputOverlay.style.width = "100%";
+  inputOverlay.style.height = "100%";
+  inputOverlay.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+  inputOverlay.style.display = "flex";
+  inputOverlay.style.alignItems = "center";
+  inputOverlay.style.justifyContent = "center";
+  inputOverlay.style.zIndex = 9999;
+
+  const inputBox = document.createElement("div");
+  inputBox.style.background = "#fff";
+  inputBox.style.padding = "20px";
+  inputBox.style.borderRadius = "8px";
+  inputBox.style.boxShadow = "0 0 10px rgba(0, 0, 0, 0.2)";
+  inputBox.style.maxWidth = "400px";
+  inputBox.style.width = "100%";
+
+  inputBox.innerHTML = `
+  <p style="margin-bottom: 10px;">${message}</p>
+  <input type="text" id="customUserInput" placeholder="${placeholder}" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px;" />
+  <div style="text-align: right;">
+    <button id="customInputCancelBtn" class="custom-btn cancel" style="margin-right: 10px;">Cancel</button>
+    <button id="customInputOkBtn" class="custom-btn ok">OK</button>
+  </div>
+`;
+
+
+  inputOverlay.appendChild(inputBox);
+  document.body.appendChild(inputOverlay);
+
+  document.getElementById("customInputOkBtn").onclick = () => {
+    const value = document.getElementById("customUserInput").value;
+    document.body.removeChild(inputOverlay);
+    callback(value);
+  };
+
+  document.getElementById("customInputCancelBtn").onclick = () => {
+    document.body.removeChild(inputOverlay);
+    callback(null); // Or you can skip calling callback
+  };
+}
+
 
 
 
@@ -844,54 +930,132 @@ function getTarget() {
   return window._activeFloatingTarget;
 }
 
+// function editText() {
+//   const el = getTarget();
+//   const newText = prompt("Enter new text:", el.innerText);
+//   if (newText !== null) el.innerText = newText;
+// }
 function editText() {
   const el = getTarget();
-  const newText = prompt("Enter new text:", el.innerText);
-  if (newText !== null) el.innerText = newText;
+  const currentText = el.innerText;
+
+  showCustomInput("Enter new text:", currentText, (newText) => {
+    if (newText !== null && newText.trim() !== "") {
+      el.innerText = newText;
+    
+    }
+  });
 }
+
 
 function changeTextColor() {
   const el = getTarget();
-  const color = prompt("Enter text color (e.g., red or #ff0000):");
-  if (color) el.style.color = color;
+  const currentColor = el.style.color || "#000000";
+
+  showCustomInput("Enter text color (e.g., red or #ff0000):", currentColor, (color) => {
+    if (color && color.trim() !== "") {
+      el.style.color = color.trim();
+      addToHistory(); // Optional: record change
+    }
+  });
 }
+
 
 function changeBgColor() {
   const el = getTarget();
-  const color = prompt("Enter background color:");
-  if (color) el.style.backgroundColor = color;
+  showCustomInput(
+    "Enter background color (e.g., #f0f0f0 or red):",
+    el.style.backgroundColor || "#ffffff",
+    (color) => {
+      if (color) el.style.backgroundColor = color;
+    }
+  );
 }
+
 
 function changeBorderStyle() {
   const el = getTarget();
-  const style = prompt("Enter border style: solid, dashed, dotted, double, groove, ridge, inset, outset", "solid");
-  if (style) el.style.borderStyle = style;
+  showCustomInput(
+    "Enter border style (e.g., solid, dashed, dotted, double, groove, ridge, inset, outset):",
+    el.style.borderStyle || "solid",
+    (style) => {
+      if (style) el.style.borderStyle = style;
+    }
+  );
 }
 
 
+
+
+// function changeBorderColor() {
+//   const el = getTarget();
+//   const color = prompt("Enter border color:");
+//   if (color) el.style.borderColor = color;
+// }
 function changeBorderColor() {
   const el = getTarget();
-  const color = prompt("Enter border color:");
-  if (color) el.style.borderColor = color;
+
+  showCustomInput(
+    "Enter border color (e.g., red, #ff0000):",
+    el.style.borderColor || "#000000",
+    (color) => {
+      if (color) el.style.borderColor = color;
+    }
+  );
 }
+
 
 function changeFontSize() {
   const el = getTarget();
-  const size = prompt("Enter font size (e.g., 18px):");
-  if (size) el.style.fontSize = size;
+
+  showCustomInput(
+    "Enter font size (e.g., 18px):",
+    el.style.fontSize || "16px",
+    (size) => {
+      if (size) el.style.fontSize = size;
+    }
+  );
 }
+
+
 
 function changeFontFamily() {
   const el = getTarget();
-  const family = prompt("Enter font family (e.g., Arial):");
-  if (family) el.style.fontFamily = family;
+
+  showCustomInput(
+    "Select a font family:",
+    el.style.fontFamily || "Arial",
+    (family) => {
+      if (family) el.style.fontFamily = family;
+    },
+    [
+      "Arial", 
+      "Helvetica", 
+      "Times New Roman", 
+      "Georgia", 
+      "Courier New", 
+      "Verdana", 
+      "Tahoma", 
+      "Trebuchet MS", 
+      "Impact", 
+      "Lucida Console"
+    ]
+  );
 }
+
 
 function changeBorderRadius() {
   const el = getTarget();
-  const radius = prompt("Enter border radius (e.g., 8px):");
-  if (radius) el.style.borderRadius = radius;
+
+  showCustomInput(
+    "Enter border radius (e.g., 8px):",
+    el.style.borderRadius || "0px",
+    (radius) => {
+      if (radius) el.style.borderRadius = radius;
+    }
+  );
 }
+
 
 // showCustomConfirm("Are you sure you want to delete this element?", (confirmed) => {
 //   if (confirmed) {
